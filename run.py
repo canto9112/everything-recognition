@@ -19,7 +19,8 @@ def draw_sqare(frame, color):
 
 
 def get_cascades():
-    # Функция получает каскады из файла config.py и обрабатывает те у которых draw = True
+    # Функция классифицирует только те каскады которые помечены как draw = True в файле config.py
+    # Возвращает список из только нужных каскадов
     cascades = [
         (cv2.CascadeClassifier(cascade['path']), cascade['color'])
         for title, cascade in CASCADES.items()
@@ -29,13 +30,14 @@ def get_cascades():
 
 
 if __name__ == "__main__":
-    cascades = get_cascades() # получаем нужные нам каскады
+    cascades = get_cascades() # получаем только те каскады которые мы хотим чтоб были отрисованы (которые помечены как draw = True в файле config.py)
 
-    video_capture = cv2.VideoCapture(0) # говорит о том что мы получаем видео с веб-камеры
+    video_capture = cv2.VideoCapture(0) # говорит о том что мы открываем веб-камеру для видеопотока
     while True:
         if not video_capture.isOpened(): # Если видеокамера недоступна то выведет Sorry
             print("Couldn't find your webcam... Sorry :c")
-        _, webcam_frame = video_capture.read() # Получаем True  и рамку вебкамеры
+        _, webcam_frame = video_capture.read() # read() говорит нам о том что мы начинаем считывать кадры с нашей веб-камеры.
+                                               # если '_' = False то камера отключена или больше нет кадров
 
         gray_frame = cv2.cvtColor(webcam_frame, cv2.COLOR_BGR2HSV)# Установка цветового пространства на серый
         for cascade, color in cascades:
@@ -47,7 +49,7 @@ if __name__ == "__main__":
             )]# Получаем картинку которую нам нужно распознать
             for capture in captures:
                 for (x, y, w, h) in capture:
-                    draw_sqare(webcam_frame, color)# отрисовываем квадрат на видео
+                    draw_sqare(webcam_frame, color)# отрисовываем квадрат на кадре видео потока
         show_frame(webcam_frame)# показываем видео с квадратами
 
         if is_user_wants_quit():# Если пользователь нажал q выходим из бесконечного цикла
