@@ -35,8 +35,7 @@ if __name__ == "__main__":
     while True:
         if not video_capture.isOpened(): # Если видеокамера недоступна то выведет Sorry
             print("Couldn't find your webcam... Sorry :c")
-        _, webcam_frame = video_capture.read() # чтения видеофайлов или захвата данных в результате декодирования и
-                                               # возврата только что захваченного кадра.
+        _, webcam_frame = video_capture.read() # читаем каждый кадр видеопотока
 
         gray_frame = cv2.cvtColor(webcam_frame, cv2.COLOR_BGR2HSV)# Установка цветового пространства на серый
         for cascade, color in cascades:
